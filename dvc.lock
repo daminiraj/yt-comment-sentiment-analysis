@@ -1,0 +1,82 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data/data_ingestion.py
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 5be34fdcab489584c6cdca84d66e77be
+      size: 4305
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.25
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 49d68ac9e22c6088d4afd89da38f5c38.dir
+      size: 6919701
+      nfiles: 2
+  data_preprocessing:
+    cmd: python src/data/data_preprocessing.py
+    deps:
+    - path: data/raw/test.csv
+      hash: md5
+      md5: 2e81d6eb492d93987768f731e904781c
+      size: 1680931
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 18b3faba324bc010ea34ff2d9244645f
+      size: 5238770
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 1939d7d2de4d16ef35c74768657059dd
+      size: 3842
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: 056a565b1ab539e7c535709c3d4b5e92.dir
+      size: 5134850
+      nfiles: 2
+  model_building:
+    cmd: python src/model/model_building.py
+    deps:
+    - path: data/interim/train_processed.csv
+      hash: md5
+      md5: b5a818f46d32f38de3b86a761aa39e1e
+      size: 3886282
+    - path: src/model/model_building.py
+      hash: md5
+      md5: 3df6d1ac6c6e22ff9f19df8dbe39bc65
+      size: 5662
+    outs:
+    - path: lgbm_model.pkl
+      hash: md5
+      md5: 18f884bcd336287b69219ecbe0e81cf9
+      size: 4113116
+    - path: tfidf_vectorizer.pkl
+      hash: md5
+      md5: fe61c56f69569ad5f5a886f73ec53288
+      size: 384000
+  model_evaluation:
+    cmd: python src/model/model_evaluation.py
+    deps:
+    - path: data/interim/test_processed.csv
+      hash: md5
+      md5: 20e0d1f7475c3f6ff20400efbc8c4774
+      size: 1248568
+    - path: data/interim/train_processed.csv
+      hash: md5
+      md5: b5a818f46d32f38de3b86a761aa39e1e
+      size: 3886282
+    - path: lgbm_model.pkl
+      hash: md5
+      md5: 18f884bcd336287b69219ecbe0e81cf9
+      size: 4113116
+    - path: src/model/model_evaluation.py
+      hash: md5
+      md5: ff7f123af5cf8762622fd40cf85565a5
+      size: 7541
+    - path: tfidf_vectorizer.pkl
+      hash: md5
+      md5: fe61c56f69569ad5f5a886f73ec53288
+      size: 384000
