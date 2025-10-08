@@ -2,6 +2,9 @@ name: CICD Pipeline
 
 on: push
 
+permissions:
+  contents: write  # Required for pushing
+
 jobs:
   model-deployment:
     runs-on: ubuntu-latest
