@@ -124,17 +124,17 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
         # Save the dictionary as a JSON file
         with open(file_path, 'w') as file:
             json.dump(model_info, file, indent=4)
-        logger.debug('Model info saved to %s', file_path)
+        logger.debug('Model info saved to  %s', file_path)
     except Exception as e:
-        logger.error('Error occurred while saving the model info: %s', e)
+        logger.error('Errors occurred while saving the model info: %s', e)
         raise
 
 
 def main():
     print('model tracking now')
-    mlflow.set_tracking_uri("http://ec2-54-218-243-117.us-west-2.compute.amazonaws.com:8000/")
+    mlflow.set_tracking_uri("http://52.37.23.204:8000/")
 
-    mlflow.set_experiment('dvc-pipeline-runs')
+    mlflow.set_experiment('dvc-pipeline')
 
     with mlflow.start_run() as run:
         try:
@@ -168,15 +168,14 @@ def main():
 
             # Log model with signature
             print('log model now')
-            mlflow.sklearn.log_model(
-                model,
-                "lgbm_model",
-                signature=signature,  # <--- Added for signature
-                input_example=input_example  # <--- Added input example
-            )
+
 
             # Save model info
-            model_path = "lgbm_model"
+            mlflow.sklearn.log_model(
+               model,'lgbm_model'
+            )
+            model_path="lgbm_model"
+
             save_model_info(run.info.run_id, model_path, 'experiment_info.json')
 
             # Log the vectorizer as an artifact

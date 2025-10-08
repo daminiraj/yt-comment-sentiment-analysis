@@ -31,3 +31,8 @@ stages:
       - data/interim/train_processed.csv
       - data/interim/test_processed.csv
       - src/model/model_evaluation.py
+  model_registration:
+    cmd: python src/model/register_model.py
+    deps:
+      - experiment_info.json
+      - src/model/register_model.py
